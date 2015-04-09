@@ -1,9 +1,9 @@
 {
-    "name": "temhri/phpapp",
+    "name": "temhri/Yii2-Shopping-Cart",
     "type": "library",
     "description": "a php library",
     "keywords": ["php"],
-    "homepage": "https://github.com/ImAnilChaudhari/phpapp",
+    "homepage": "https://github.com/ImAnilChaudhari/Yii2-Shopping-Cart",
     "license": "MIT",
     "authors": [
         {
