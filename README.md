@@ -19,4 +19,13 @@ or add
 to the require section of your application's `composer.json` file.
 
 ## Usage Example
+```php
+[
+    'components' => [
+        'shoppingCart' => [
+            'class' => 'temhri\ShoppingCart'
+        ]
+    ]
+]
+```
 
