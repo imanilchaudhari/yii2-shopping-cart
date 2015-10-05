@@ -8,12 +8,12 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require "temhri/yii2-shopping-cart" "dev-master"
+php composer.phar require "imanilchaudhari/yii2-shopping-cart" "dev-master"
 ```
 or add
 
 ```json
-"temhri/yii2-shopping-cart": "dev-master"
+"imanilchaudhari/yii2-shopping-cart": "dev-master"
 ```
 
 to the require section of your application's `composer.json` file.
@@ -23,7 +23,7 @@ to the require section of your application's `composer.json` file.
 [
     'components' => [
         'shoppingCart' => [
-            'class' => 'temhri\ShoppingCart'
+            'class' => 'imanilchaudhari\ShoppingCart'
         ]
     ]
 ]
