@@ -1,0 +1,206 @@
+<?php
+/**
+ * position in the cart
+ *
+ * @author Anil Chaudhari <caanil90@gmail.com>
+ * @version 0.1
+ * @package ShoppingCart
+ *
+ * Can be used with not AR models.
+ */
+
+namespace imanilchaudhari\ShoppingCart;
+
+use Yii;
+use yii\base\Component;
+use yii\base\Event;
+
+
+
+//class Cart extends CMap {
+class Cart extends Component {
+
+    /**
+     * Update the model on session restore?
+     * @var boolean
+     */
+    public $refresh = true;
+
+    public $discounts = array();
+    /**
+     * Сумма скидки на всю корзину
+     * @var float
+     */
+    protected $discountPrice = 0.0;
+
+    public function init() {
+
+        $this->restoreFromSession();
+    }
+
+    /**
+     * Restores the shopping cart from the session
+     */
+    public function restoreFromSession() {
+        $data = Yii::app()->getUser()->getState(__CLASS__);
+        if (is_array($data) || $data instanceof Traversable)
+            foreach ($data as $key => $product)
+                parent::add($key, $product);
+
+    }
+
+    /**
+     * Add item to the shopping cart
+     * If the position was previously added to the cart,
+     * then information of it is updated, and count increases by $quantity
+     * @param IECartPosition $position
+     * @param int count of elements positions
+     */
+    public function put(CartPosition $position, $quantity = 1) {
+        $key = $position->getId();
+        if ($this->itemAt($key) instanceof CartPosition) {
+            $position = $this->itemAt($key);
+            $oldQuantity = $position->getQuantity();
+            $quantity += $oldQuantity;
+        }
+
+        $this->update($position, $quantity);
+
+    }
+
+
+    /**
+     * @param mixed $key
+     * @param mixed $value
+     */
+    public function add($key, $value) {
+        $this->put($value, 1);
+    }
+
+    /**
+     * Removes position from the shopping cart of key
+     * @param mixed $key
+     */
+    public function remove($key) {
+        parent::remove($key);
+        $this->applyDiscounts();
+        $this->onRemovePosition(new Event($this));
+        $this->saveState();
+    }
+
+
+    /**
+     * Updates the position in the shopping cart
+     * If the position was previously added, then it will be updated in shopping cart,
+     * if the position was not previously in the cart, it will be added there.
+     * If the count of less than 1, the position will be deleted.
+     *
+     * @param IECartPosition $position
+     * @param int $quantity
+     */
+    public function update(CartPosition $position, $quantity) {
+        if (!($position instanceof Component))
+            throw new InvalidArgumentException('invalid argument 1, product must implement CComponent interface');
+
+        $key = $position->getId();
+
+        $position->attachBehavior("CartPosition", new CartPositionBehaviour());
+        $position->setRefresh($this->refresh);
+
+        $position->setQuantity($quantity);
+
+        if ($position->getQuantity() < 1)
+            $this->remove($key);
+        else
+            parent::add($key, $position);
+
+        $this->applyDiscounts();
+        $this->onUpdatePoistion(new Event($this));
+        $this->saveState();
+    }
+
+    /**
+     * Saves the state of the object in the session.
+     * @return void
+     */
+    protected function saveState() {
+        Yii::app()->getUser()->setState(__CLASS__, $this->toArray());
+    }
+
+    /**
+     * Returns count of items in shopping cart
+     * @return int
+     */
+    public function getItemsCount() {
+        $count = 0;
+        foreach ($this as $position)
+        {
+            $count += $position->getQuantity();
+        }
+
+        return $count;
+    }
+
+
+    /**
+     * Returns total price for all items in the shopping cart.
+     * @param bool $withDiscount
+     * @return float
+     */
+    public function getCost($withDiscount = true) {
+        $price = 0.0;
+        foreach ($this as $position)
+        {
+            $price += $position->getSumPrice($withDiscount);
+        }
+
+        if($withDiscount)
+            $price -= $this->discountPrice;
+
+        return $price;
+    }
+
+    public function onRemovePosition($event) {
+        $this->raiseEvent('onRemovePosition', $event);
+    }
+
+    public function onUpdatePoistion($event) {
+        $this->raiseEvent('onUpdatePoistion', $event);
+    }
+
+    /**
+     * apply discounts for all positions
+     * @return void
+     */
+    protected function applyDiscounts() {
+        foreach ($this->discounts as $discount)
+        {
+            $discountObj = Yii::createComponent($discount);
+            $discountObj->setShoppingCart($this);
+            $discountObj->apply();
+        }
+    }
+
+    public function addDiscountPrice($price){
+        $this->discountPrice += $price;
+    }
+
+    /**
+     * Returns array all positions
+     * @return array
+     */
+    public function getPositions()
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return !(bool)$this->getCount();
+    }
+
+
+}

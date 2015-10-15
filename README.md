@@ -1,7 +1,7 @@
 ## This is under development ##
 
 
-# Yii2-Shopping-Cart is extention for Yii Framework 2.0
+# Yii2-shopping-cart is extention for Yii Framework 2.0
 ## Installation
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
@@ -23,7 +23,7 @@ to the require section of your application's `composer.json` file.
 [
     'components' => [
         'shoppingCart' => [
-            'class' => 'imanilchaudhari\ShoppingCart'
+            'class' => 'imanilchaudhari\ShoppingCart\Cart'
         ]
     ]
 ]
