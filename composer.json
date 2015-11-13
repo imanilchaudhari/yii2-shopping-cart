@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-0": {
-            "imanilchaudhari\\shoppingCart\\": ""
+            "imanilchaudhari\\shoppingCart\\": "src/"
         }
     },
     "minimum-stability": "stable"
