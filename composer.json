@@ -24,8 +24,8 @@
         "yiisoft/yii2": "*"
     },
     "autoload": {
-        "psr-0": {
-            "imanilchaudhari\\shoppingCart\\": "src/"
+        "psr-4": {
+            "imanilchaudhari\\ShoppingCart\\": ""
         }
     },
     "minimum-stability": "stable"

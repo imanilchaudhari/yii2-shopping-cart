@@ -18,7 +18,7 @@ use yii\base\Event;
 
 
 //class Cart extends CMap {
-class Cart extends Component {
+class Cart extends Component {   
 
     /**
      * Update the model on session restore?
