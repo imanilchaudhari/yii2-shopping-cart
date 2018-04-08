@@ -2,7 +2,7 @@
 /**
  * Discount abstract class
  *
- * @author Anil Chaudhari <caanil90@gmail.com>
+ * @author Anil Chaudhari <imanilchaudhari@gmail.com>
  * @version 0.1
  * @package ShoppingCart
  *
