@@ -8,7 +8,7 @@
     "authors": [
         {
             "name": "Anil Chaudhari",
-            "email": "caanil90@gmail.com",
+            "email": "imanilchaudhari@gmail.com",
             "homepage": "http://www.anilchaudhari.com.np",
             "role": "Developer"
         }
@@ -16,7 +16,7 @@
     "repositories":[
         {
             "type": "git",
-            "url": "https://github.com/ImAnilChaudhari/yii2-shopping-cart.git"
+            "url": "https://github.com/imanilchaudhari/yii2-shopping-cart.git"
         }
     ],
     "require": {
